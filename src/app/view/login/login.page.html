@@ -1,0 +1,35 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>login</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <h1 class="centerText">Gerenciamento de quadra</h1>
+  <form (ngSubmit)="sendForm()">
+    <ion-list>
+      <ion-item>
+        <ion-input required type="email" placeholder="exemplo@email.com" name="userName" [(ngModel)]="userName" label="E-mail"></ion-input> <!-- ngModel: para alterar na classe e no html pelo two way data bidding -->
+      </ion-item>
+      
+      <ion-item>
+        <ion-input required type="password" name="password" name="password" [(ngModel)]="password" label="Senha"></ion-input>
+      </ion-item>
+      
+      <button ion-button type="submit" block class="btn-primary" >Enviar</button>
+    </ion-list>
+  
+  </form>
+
+  <div style="color: red; margin-left: 15px;" id="hideAfterSecond">
+    {{ message }}
+  </div>
+
+  <aside style="color: rgb(170, 170, 170); margin: 100px 0 0 15px; ">
+    <sub style="font-weight: bolder;">Dicas de login</sub><br>
+    <sub>E-mail: admin&#64;hotmail.com</sub><br>
+    <sub>Senha: 123456</sub><br>   
+  </aside>
+
+</ion-content>

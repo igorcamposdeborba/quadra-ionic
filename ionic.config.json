@@ -1,0 +1,7 @@
+{
+  "name": "quadra",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

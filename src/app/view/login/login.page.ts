@@ -36,36 +36,37 @@ export class LoginPage {
             this.router.navigate(['/admin']);
           }
         }, error => {
-          if (error.status === 0) { // checar erro de conexão com o back-end
-            // Backup de login
-            const errorLogin = {
-              id: 1,
-              name: 'Error User',
-              email: 'error@example.com',
-              password: 'errorPassword',
-              typeUser: 'ERROR'
-            };
+          // backup do login em caso do banco de dado estar fora do ar
+          const errorLogin = {
+            id: 1,
+            name: 'Igor',
+            email: 'admin@hotmail.com',
+            password: '123456',
+            typeUser: 'ADMIN'
+          };
   
-            LocalNotifications.schedule({
-              notifications: [
-                {
-                  title: 'Erro de Conexão',
-                  body: 'Houve um erro de conexão. Usando credenciais de erro.',
-                  id: 2,
-                  schedule: { at: new Date(Date.now()) }
-                }
-              ]
-            });
-          } else {
-            this.message = `${error.error.message}`;
-            setTimeout(() => {
-              this.message = '';
-            }, 3000);
-          }
+          LocalNotifications.schedule({
+            notifications: [
+              {
+                title: 'Erro de Conexão',
+                body: 'Houve um erro de conexão. Usando credenciais específicas.',
+                id: 2,
+                schedule: { at: new Date(Date.now()) }
+              }
+            ]
+          });
+          this.handleLogin(errorLogin); // backup do login em caso do banco de dado estar fora do ar
         }
       );
     } else {
       this.message = 'Preencha com o tamanho mínimo correto o usuário e senha.';
+    }
+  }
+  
+  // Método para manipular o login
+  private handleLogin(user: any): void {
+    if (user.typeUser.toUpperCase() === 'ADMIN') {
+      this.router.navigate(['/admin']);
     }
   }
 

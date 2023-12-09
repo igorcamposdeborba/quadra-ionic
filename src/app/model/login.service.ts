@@ -1,36 +1,40 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { Observable, BehaviorSubject } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { LoginUserInterface } from './loginUserInterface';
+import { API_CONFIG } from '../config/api.config';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
+  private userSubject = new BehaviorSubject<LoginUserInterface | null>(null); // Para verificar usuário logado: observable (contexto) mantém dados entre componentes do usuário
 
-  public idUserLogged : number = -1;
-  public userLogged : any = null; // atributo para validação temporária com os dados do usuário logado
-
-
-  private backendUrl = "http://localhost:8080"
+  public userLogged: LoginUserInterface | null = null;
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(email : string, password : string) : Observable<LoginUserInterface> {
+  login(email: string, password: string): Observable<LoginUserInterface> {
     const body = { email, password };
-    let response : any = this.http.post(`${this.backendUrl}/login`, body); // resgatar usuário do banco de dados
     
-    // Salvar dados do usuário
-    if (response.userName === email && response.password === password) {
-      this.idUserLogged = response.id;
-      this.userLogged = response; // guardar temporariamente o usuário logado, por meio de objeto usuário com login e senha iguais aos do array comparado com os que foi fornecido por parâmetro
-    }
-    return response; // retornar usuário ou mensagem de erro contidos na response da requisição
+    return this.http.post<LoginUserInterface>(`${API_CONFIG.baseUrl}/login`, body)
+      .pipe(
+        tap(user => {
+          this.userLogged = user; // Salvar dados do usuário logado
+          this.userSubject.next(user);
+        })
+      );
   }
 
-  logout() : void{
+  logout(): void {
+    this.userSubject.next(null); // deslogar do observable de context
+    this.userLogged = null;
     this.router.navigate(['/login']);
+  }
+
+  isUserLoggedIn(): boolean {
+    return this.userSubject.getValue() !== null;
   }
 }

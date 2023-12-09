@@ -16,8 +16,9 @@
       <ion-item>
         <ion-input required type="password" name="password" name="password" [(ngModel)]="password" label="Senha"></ion-input>
       </ion-item>
-      
-      <button ion-button type="submit" block class="btn-primary" >Enviar</button>
+      <ion-buttons class="ion-text-center">
+        <ion-button type="submit" class="btn-primary" expand="block" [disabled]="isUnfilled()">Enviar</ion-button>
+      </ion-buttons>
     </ion-list>
   
   </form>
